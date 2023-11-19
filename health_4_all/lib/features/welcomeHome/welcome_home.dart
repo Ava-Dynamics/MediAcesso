@@ -17,9 +17,11 @@ class MyApp extends StatelessWidget {
 }
 
 class WelcomeHomePage extends StatelessWidget {
+  const WelcomeHomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
-    WelcomeHomeViewModel viewModel = Provider.of<WelcomeHomeViewModel>(context);
+    final viewModel = Provider.of<WelcomeHomeViewModel>(context);
 
     return WelcomeHomeView(
       onQueroMeCadastrarPressed: viewModel.onQueroMeCadastrarPressed,

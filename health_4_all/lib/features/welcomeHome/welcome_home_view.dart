@@ -17,30 +17,33 @@ class WelcomeHomeView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              'Bem vindo(a) ao MediFarma Delivery',
-              textAlign:TextAlign.center,
+            Text(
+              'Bem-vindo(a) ao MediFarma Delivery',
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.blue,
               ),
             ),
-            const SizedBox(height: 240),
+            SizedBox(height: 240),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const FormElegibilityView()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const FormElegibilityView()),
+                );
               },
-              child: const Text('Quero me cadastrar')
+              child: Text('Quero me cadastrar'),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 print('Já sou cadastrado pressionado');
-            },
-              child: const Text('Já sou cadastrado'),
-        ),
-        ],
+              },
+              child: Text('Já sou cadastrado'),
+            ),
+          ],
         ),
       ),
     );
