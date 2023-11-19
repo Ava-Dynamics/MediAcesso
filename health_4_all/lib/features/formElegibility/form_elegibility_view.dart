@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:health_4_all/features/formElegibility/form_elegibility_view_model.dart';
+import 'package:health_4_all/features/attachPage/attach_page_view.dart';
 
 class FormElegibilityView extends StatefulWidget {
   const FormElegibilityView({Key? key}) : super(key: key);
@@ -26,25 +27,24 @@ class _FormElegibilityViewState extends State<FormElegibilityView> {
   }
 
   void _formatCPF() {
-  String unformattedCPF = _cpfController.text.replaceAll(RegExp(r'\D'), '');
+    String unformattedCPF = _cpfController.text.replaceAll(RegExp(r'\D'), '');
 
-  if (unformattedCPF.length <= 3) {
-    _cpfController.text = unformattedCPF;
-  } else if (unformattedCPF.length <= 6) {
-    _cpfController.text = '${unformattedCPF.substring(0, 3)}.${unformattedCPF.substring(3)}';
-  } else if (unformattedCPF.length <= 9) {
-    _cpfController.text =
-        '${unformattedCPF.substring(0, 3)}.${unformattedCPF.substring(3, 6)}.${unformattedCPF.substring(6)}';
-  } else {
-    _cpfController.text =
-        '${unformattedCPF.substring(0, 3)}.${unformattedCPF.substring(3, 6)}.${unformattedCPF.substring(6, 9)}-${unformattedCPF.substring(9)}';
+    if (unformattedCPF.length <= 3) {
+      _cpfController.text = unformattedCPF;
+    } else if (unformattedCPF.length <= 6) {
+      _cpfController.text = '${unformattedCPF.substring(0, 3)}.${unformattedCPF.substring(3)}';
+    } else if (unformattedCPF.length <= 9) {
+      _cpfController.text =
+          '${unformattedCPF.substring(0, 3)}.${unformattedCPF.substring(3, 6)}.${unformattedCPF.substring(6)}';
+    } else {
+      _cpfController.text =
+          '${unformattedCPF.substring(0, 3)}.${unformattedCPF.substring(3, 6)}.${unformattedCPF.substring(6, 9)}-${unformattedCPF.substring(9)}';
+    }
+
+    // Certifique-se de que a seleção não ultrapasse o comprimento atual do texto
+    int newCursorPosition = _cpfController.text.length;
+    _cpfController.selection = TextSelection.fromPosition(TextPosition(offset: newCursorPosition));
   }
-
-  // Certifique-se de que a seleção não ultrapasse o comprimento atual do texto
-  int newCursorPosition = _cpfController.text.length;
-  _cpfController.selection = TextSelection.fromPosition(TextPosition(offset: newCursorPosition));
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -68,22 +68,32 @@ class _FormElegibilityViewState extends State<FormElegibilityView> {
                 ),
               ),
               const SizedBox(height: 16.0),
-              _buildTextFieldWithLabel('Nome completo', 'Informe o valor', TextEditingController()),
+              _buildTextFieldWithLabel('Nome completo', 'Informe o valor', TextEditingController(), onChanged: (value) {
+                viewModel.nomeCompleto = value;
+              }),
               _buildTextFieldWithLabel('Número do CPF', 'Informe o valor', _cpfController, onChanged: (value) {
                 viewModel.numeroCpf = value;
                 viewModel.updateCpfValidation(value);
               }),
-              _buildTextFieldWithLabel('Nome da rua', 'Informe o valor', TextEditingController()),
-              _buildTextFieldWithLabel('Número residencial', 'Informe o valor', TextEditingController()),
-              _buildTextFieldWithLabel('Cidade', 'Informe o valor', TextEditingController()),
-              _buildTextFieldWithLabel('Estado', 'Informe o valor', TextEditingController()),
+              _buildTextFieldWithLabel('Nome da rua', 'Informe o valor', TextEditingController(), onChanged: (value) {
+                viewModel.nomeRua = value;
+              }),
+              _buildTextFieldWithLabel('Número residencial', 'Informe o valor', TextEditingController(), onChanged: (value) {
+                viewModel.numeroResidencial = value;
+              }),
+              _buildTextFieldWithLabel('Cidade', 'Informe o valor', TextEditingController(), onChanged: (value) {
+                viewModel.cidade = value;
+              }),
+              _buildTextFieldWithLabel('Estado', 'Informe o valor', TextEditingController(), onChanged: (value) {
+                viewModel.estado = value;
+              }),
               const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: () {
                   // Lógica para processar os dados do formulário
                   _submitForm();
                 },
-                child: const Text('Proximo Passo'),
+                child: const Text('Próximo Passo'),
               ),
             ],
           ),
@@ -93,11 +103,17 @@ class _FormElegibilityViewState extends State<FormElegibilityView> {
   }
 
   void _submitForm() {
-    // Exemplo: Exibir mensagem de erro se o CPF for inválido
-    String cpfValidationError = viewModel.isValidCPF(_cpfController.text);
-    if (cpfValidationError.isNotEmpty) {
-      // Exibir SnackBar com a mensagem de erro
-      _showErrorSnackBar(cpfValidationError);
+    // Verificar se todos os campos estão preenchidos corretamente
+    if (_areAllFieldsFilled() && viewModel.isValidCPF(_cpfController.text).isEmpty) {
+      // Todos os campos estão preenchidos corretamente
+      // Navegar para a próxima tela (AttachPageView)
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => AttachPageview()),
+      );
+    } else {
+      // Exibir SnackBar com a mensagem de erro específica
+      _showErrorSnackBar('Todos os campos são obrigatórios e o CPF deve ser válido');
     }
   }
 
@@ -132,5 +148,14 @@ class _FormElegibilityViewState extends State<FormElegibilityView> {
         const SizedBox(height: 16.0),
       ],
     );
+  }
+
+  bool _areAllFieldsFilled() {
+    return viewModel.nomeCompleto.isNotEmpty &&
+        viewModel.numeroCpf.isNotEmpty &&
+        viewModel.nomeRua.isNotEmpty &&
+        viewModel.numeroResidencial.isNotEmpty &&
+        viewModel.cidade.isNotEmpty &&
+        viewModel.estado.isNotEmpty;
   }
 }

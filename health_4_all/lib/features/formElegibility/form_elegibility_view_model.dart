@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:health_4_all/features/attachPage/attach_page_view.dart';
 import 'package:health_4_all/features/formElegibility/form_elegibility_model.dart';
 
 class UserInfoViewModel {
@@ -67,7 +69,6 @@ class UserInfoViewModel {
     return calculatedVerifier;
   }
 
-
   String get nomeRua => _userInfo.nomeRua;
   set nomeRua(String value) {
     _userInfo.nomeRua = value;
@@ -86,5 +87,17 @@ class UserInfoViewModel {
   String get estado => _userInfo.estado;
   set estado(String value) {
     _userInfo.estado = value;
+  }
+}
+
+class WelcomeHomeViewModel with ChangeNotifier {
+  // ... outras partes da sua classe
+  void navigateToAttachPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AttachPageview(),
+      ),
+    );
   }
 }
