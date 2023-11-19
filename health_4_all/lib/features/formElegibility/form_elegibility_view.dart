@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:health_4_all/features/formElegibility/form_elegibility_view_model.dart';
 import 'package:health_4_all/features/attachPage/attach_page_view.dart';
+import 'package:health_4_all/features/formElegibility/form_elegibility_view_model.dart';
 
 class FormElegibilityView extends StatefulWidget {
   const FormElegibilityView({Key? key}) : super(key: key);
@@ -10,7 +10,7 @@ class FormElegibilityView extends StatefulWidget {
 }
 
 class _FormElegibilityViewState extends State<FormElegibilityView> {
-  final UserInfoViewModel viewModel = UserInfoViewModel();
+  final FormElegibilityViewModel viewModel = FormElegibilityViewModel();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController _cpfController = TextEditingController();
 
@@ -41,7 +41,6 @@ class _FormElegibilityViewState extends State<FormElegibilityView> {
           '${unformattedCPF.substring(0, 3)}.${unformattedCPF.substring(3, 6)}.${unformattedCPF.substring(6, 9)}-${unformattedCPF.substring(9)}';
     }
 
-    // Certifique-se de que a seleção não ultrapasse o comprimento atual do texto
     int newCursorPosition = _cpfController.text.length;
     _cpfController.selection = TextSelection.fromPosition(TextPosition(offset: newCursorPosition));
   }
@@ -90,8 +89,7 @@ class _FormElegibilityViewState extends State<FormElegibilityView> {
               const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: () {
-                  // Lógica para processar os dados do formulário
-                  _submitForm();
+                  _submitForm(context);
                 },
                 child: const Text('Próximo Passo'),
               ),
@@ -102,17 +100,13 @@ class _FormElegibilityViewState extends State<FormElegibilityView> {
     );
   }
 
-  void _submitForm() {
-    // Verificar se todos os campos estão preenchidos corretamente
-    if (_areAllFieldsFilled() && viewModel.isValidCPF(_cpfController.text).isEmpty) {
-      // Todos os campos estão preenchidos corretamente
-      // Navegar para a próxima tela (AttachPageView)
+  void _submitForm(BuildContext context) {
+    if (viewModel.isFormValid()) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => AttachPageview()),
+        MaterialPageRoute(builder: (context) => AttachPageView()),
       );
     } else {
-      // Exibir SnackBar com a mensagem de erro específica
       _showErrorSnackBar('Todos os campos são obrigatórios e o CPF deve ser válido');
     }
   }
@@ -148,14 +142,5 @@ class _FormElegibilityViewState extends State<FormElegibilityView> {
         const SizedBox(height: 16.0),
       ],
     );
-  }
-
-  bool _areAllFieldsFilled() {
-    return viewModel.nomeCompleto.isNotEmpty &&
-        viewModel.numeroCpf.isNotEmpty &&
-        viewModel.nomeRua.isNotEmpty &&
-        viewModel.numeroResidencial.isNotEmpty &&
-        viewModel.cidade.isNotEmpty &&
-        viewModel.estado.isNotEmpty;
   }
 }
