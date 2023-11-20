@@ -1,12 +1,37 @@
 import 'package:health_4_all/features/formElegibility/form_elegibility_model.dart';
+import 'package:validadores/Validador.dart';
+import 'package:validadores/validadores.dart';
 
 class FormElegibilityViewModel {
-  UserInfo _userInfo = UserInfo();
+  final UserInfo _userInfo = UserInfo();
   String cpfValidationError = '';
 
+  String removeSpecialCharacters(String cpf) {
+  return cpf.replaceAll(RegExp(r'\D'), ''); // Remove todos os caracteres não numéricos
+}
+
   void updateCpfValidation(String cpf) {
-    cpfValidationError = isValidCPF(cpf);
+  // Remove caracteres especiais do CPF
+  String cleanedCPF = removeSpecialCharacters(cpf);
+
+  print('CPF antes da validação: $cleanedCPF');
+  
+  String? validationError = Validador()
+    .add(Validar.CPF, msg: 'CPF Inválido')
+    .add(Validar.OBRIGATORIO, msg: 'Campo obrigatório')
+    .minLength(11)
+    .maxLength(11)
+    .valido(cleanedCPF, clearNoNumber: true);
+
+  String cpfValidationError = validationError ?? ''; // Se for nulo, atribui uma string vazia
+
+  if (validationError == null) {
+    print('CPF válido');
+  } else {
+    print('Erro na validação do CPF: $cpfValidationError');
   }
+}
+
 
   bool isFormValid() {
     return _userInfo.nomeCompleto.isNotEmpty &&
@@ -17,34 +42,6 @@ class FormElegibilityViewModel {
         _userInfo.estado.isNotEmpty &&
         cpfValidationError.isEmpty;
   }
-
-  String isValidCPF(String cpf) {
-    // Remover caracteres não numéricos
-    cpf = cpf.replaceAll(RegExp(r'[^0-9]'), '');
-
-    // Verificar se o CPF tem 11 dígitos
-    if (cpf.length != 11) {
-      return 'CPF deve ter 11 dígitos';
-    }
-
-    // Verificar se todos os dígitos são iguais (situação inválida)
-    if (RegExp(r'(\d)\1{10}').hasMatch(cpf)) {
-      return 'CPF inválido (todos os dígitos iguais)';
-    }
-
-    // Calcular os dígitos verificadores
-    List<int> cpfDigits = cpf.split('').map((e) => int.parse(e)).toList();
-    int firstVerifier = _calculateVerifier(cpfDigits.sublist(0, 9), cpfDigits[9]);
-    int secondVerifier = _calculateVerifier(cpfDigits.sublist(0, 10), cpfDigits[10]);
-
-    // Verificar se os dígitos verificadores são iguais aos fornecidos
-    if (cpfDigits[9] != firstVerifier || cpfDigits[10] != secondVerifier) {
-      return 'CPF inválido (dígitos verificadores incorretos)';
-    }
-
-    // CPF é válido
-    return '';
-  }
   
   String get nomeCompleto => _userInfo.nomeCompleto;
   set nomeCompleto(String value) {
@@ -54,15 +51,6 @@ class FormElegibilityViewModel {
   String get numeroCpf => _userInfo.numeroCpf;
   set numeroCpf(String value) {
     _userInfo.numeroCpf = value;
-  }
-
-  int _calculateVerifier(List<int> cpfDigits, int verifier) {
-    int sum = cpfDigits.fold(0, (acc, digit) => acc + digit);
-
-    int remainder = sum % 11;
-    int calculatedVerifier = (remainder < 2) ? 0 : (11 - remainder);
-
-    return calculatedVerifier;
   }
 
   String get nomeRua => _userInfo.nomeRua;

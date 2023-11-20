@@ -10,9 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   provider: ^6.1.1
-  intl:
-  firebase_core: ^2.22.0
-  firebase_auth: ^4.14.0
+  validadores: ^1.0.9
 
 dev_dependencies:
   flutter_test:

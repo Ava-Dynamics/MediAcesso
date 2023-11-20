@@ -27,23 +27,31 @@ class _FormElegibilityViewState extends State<FormElegibilityView> {
   }
 
   void _formatCPF() {
-    String unformattedCPF = _cpfController.text.replaceAll(RegExp(r'\D'), '');
+  String unformattedCPF = _cpfController.text.replaceAll(RegExp(r'\D'), '');
 
-    if (unformattedCPF.length <= 3) {
-      _cpfController.text = unformattedCPF;
-    } else if (unformattedCPF.length <= 6) {
-      _cpfController.text = '${unformattedCPF.substring(0, 3)}.${unformattedCPF.substring(3)}';
-    } else if (unformattedCPF.length <= 9) {
-      _cpfController.text =
-          '${unformattedCPF.substring(0, 3)}.${unformattedCPF.substring(3, 6)}.${unformattedCPF.substring(6)}';
-    } else {
-      _cpfController.text =
-          '${unformattedCPF.substring(0, 3)}.${unformattedCPF.substring(3, 6)}.${unformattedCPF.substring(6, 9)}-${unformattedCPF.substring(9)}';
-    }
+  // Atualiza o modelo com o valor não formatado
+  viewModel.numeroCpf = unformattedCPF;
+  viewModel.updateCpfValidation(unformattedCPF);
 
-    int newCursorPosition = _cpfController.text.length;
-    _cpfController.selection = TextSelection.fromPosition(TextPosition(offset: newCursorPosition));
+  // Atualiza a exibição com o CPF formatado
+  int newCursorPosition = _cpfController.text.length;
+  _cpfController.value = _cpfController.value.copyWith(
+    text: _formattedCPF(unformattedCPF),
+    selection: TextSelection.fromPosition(TextPosition(offset: newCursorPosition)),
+  );
+}
+
+String _formattedCPF(String unformattedCPF) {
+  if (unformattedCPF.length <= 3) {
+    return unformattedCPF;
+  } else if (unformattedCPF.length <= 6) {
+    return '${unformattedCPF.substring(0, 3)}.${unformattedCPF.substring(3)}';
+  } else if (unformattedCPF.length <= 9) {
+    return '${unformattedCPF.substring(0, 3)}.${unformattedCPF.substring(3, 6)}.${unformattedCPF.substring(6)}';
+  } else {
+    return '${unformattedCPF.substring(0, 3)}.${unformattedCPF.substring(3, 6)}.${unformattedCPF.substring(6, 9)}-${unformattedCPF.substring(9)}';
   }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -70,10 +78,7 @@ class _FormElegibilityViewState extends State<FormElegibilityView> {
               _buildTextFieldWithLabel('Nome completo', 'Informe o valor', TextEditingController(), onChanged: (value) {
                 viewModel.nomeCompleto = value;
               }),
-              _buildTextFieldWithLabel('Número do CPF', 'Informe o valor', _cpfController, onChanged: (value) {
-                viewModel.numeroCpf = value;
-                viewModel.updateCpfValidation(value);
-              }),
+              _buildCPFTextField(), // Usando a função específica para CPF
               _buildTextFieldWithLabel('Nome da rua', 'Informe o valor', TextEditingController(), onChanged: (value) {
                 viewModel.nomeRua = value;
               }),
@@ -100,26 +105,6 @@ class _FormElegibilityViewState extends State<FormElegibilityView> {
     );
   }
 
-  void _submitForm(BuildContext context) {
-    if (viewModel.isFormValid()) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => AttachPageView()),
-      );
-    } else {
-      _showErrorSnackBar('Todos os campos são obrigatórios e o CPF deve ser válido');
-    }
-  }
-
-  void _showErrorSnackBar(String errorMessage) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(errorMessage),
-        duration: const Duration(seconds: 2),
-      ),
-    );
-  }
-
   Widget _buildTextFieldWithLabel(String label, String hint, TextEditingController controller, {ValueChanged<String>? onChanged}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,6 +126,53 @@ class _FormElegibilityViewState extends State<FormElegibilityView> {
         ),
         const SizedBox(height: 16.0),
       ],
+    );
+  }
+
+  Widget _buildCPFTextField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Número do CPF',
+          style: const TextStyle(
+            fontSize: 16.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 8.0),
+        TextField(
+          controller: _cpfController,
+          onChanged: (value) {
+            viewModel.numeroCpf = value;
+            viewModel.updateCpfValidation(value);
+          },
+          decoration: InputDecoration(
+            hintText: '123.456.789-00',
+          ),
+        ),
+        const SizedBox(height: 16.0),
+      ],
+    );
+  }
+
+  void _submitForm(BuildContext context) {
+    if (viewModel.isFormValid()) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => AttachPageView()),
+      );
+    } else {
+      _showErrorSnackBar('Todos os campos são obrigatórios e o CPF deve ser válido');
+    }
+  }
+
+  void _showErrorSnackBar(String errorMessage) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(errorMessage),
+        duration: const Duration(seconds: 2),
+      ),
     );
   }
 }
