@@ -39,7 +39,6 @@ class WelcomeHomePageContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = Provider.of<WelcomeHomeViewModel>(context);
 
     return ChangeNotifierProvider(
       create: (context) => WelcomeHomeViewModel(),
