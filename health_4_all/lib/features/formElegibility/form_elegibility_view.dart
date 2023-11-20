@@ -75,20 +75,20 @@ String _formattedCPF(String unformattedCPF) {
                 ),
               ),
               const SizedBox(height: 16.0),
-              _buildTextFieldWithLabel('Nome completo', 'Informe o valor', TextEditingController(), onChanged: (value) {
+              _buildTextFieldWithLabel('Nome completo', 'Informe o nome completo', TextEditingController(), onChanged: (value) {
                 viewModel.nomeCompleto = value;
               }),
               _buildCPFTextField(), // Usando a função específica para CPF
-              _buildTextFieldWithLabel('Nome da rua', 'Informe o valor', TextEditingController(), onChanged: (value) {
+              _buildTextFieldWithLabel('Nome da rua', 'Informe o nome da rua', TextEditingController(), onChanged: (value) {
                 viewModel.nomeRua = value;
               }),
-              _buildTextFieldWithLabel('Número residencial', 'Informe o valor', TextEditingController(), onChanged: (value) {
+              _buildTextFieldWithLabel('Número residencial', 'Informe o número residencial', TextEditingController(), onChanged: (value) {
                 viewModel.numeroResidencial = value;
               }),
-              _buildTextFieldWithLabel('Cidade', 'Informe o valor', TextEditingController(), onChanged: (value) {
+              _buildTextFieldWithLabel('Cidade', 'Informe a cidade', TextEditingController(), onChanged: (value) {
                 viewModel.cidade = value;
               }),
-              _buildTextFieldWithLabel('Estado', 'Informe o valor', TextEditingController(), onChanged: (value) {
+              _buildTextFieldWithLabel('Estado', 'Informe o estado', TextEditingController(), onChanged: (value) {
                 viewModel.estado = value;
               }),
               const SizedBox(height: 16.0),

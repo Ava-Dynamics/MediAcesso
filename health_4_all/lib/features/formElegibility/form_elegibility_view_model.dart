@@ -13,8 +13,6 @@ class FormElegibilityViewModel {
   void updateCpfValidation(String cpf) {
   // Remove caracteres especiais do CPF
   String cleanedCPF = removeSpecialCharacters(cpf);
-
-  print('CPF antes da validação: $cleanedCPF');
   
   String? validationError = Validador()
     .add(Validar.CPF, msg: 'CPF Inválido')
@@ -23,15 +21,9 @@ class FormElegibilityViewModel {
     .maxLength(11)
     .valido(cleanedCPF, clearNoNumber: true);
 
-  String cpfValidationError = validationError ?? ''; // Se for nulo, atribui uma string vazia
+  cpfValidationError = validationError ?? ''; // Se for nulo, atribui uma string vazia
 
-  if (validationError == null) {
-    print('CPF válido');
-  } else {
-    print('Erro na validação do CPF: $cpfValidationError');
-  }
 }
-
 
   bool isFormValid() {
     return _userInfo.nomeCompleto.isNotEmpty &&
