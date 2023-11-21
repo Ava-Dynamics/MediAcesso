@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:health_4_all/features/attachPage/attach_page_view_model.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 class AttachPageView extends StatefulWidget {
@@ -10,7 +11,8 @@ class AttachPageView extends StatefulWidget {
 
 class _AttachPageViewState extends State<AttachPageView> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final TextEditingController _mobilityDifficultyController = TextEditingController();
+  final TextEditingController _mobilityDifficultyController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -111,14 +113,23 @@ class _AttachPageViewState extends State<AttachPageView> {
   }
 
   Future<void> _attachProof(AttachPageViewModel model) async {
+  // Solicitar permissões
+  var permissionStatus = await Permission.photos.request();
+
+  if (permissionStatus.isGranted) {
+    // A permissão foi concedida, agora podemos usar o ImagePicker
     final picker = ImagePicker();
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       model.attachProof(pickedFile.path);
       print('Imagem anexada: ${pickedFile.path}');
     }
+  } else {
+    print('Permissões não concedidas.');
+    // Aqui você pode lidar com o caso em que a permissão não foi concedida
   }
+}
 
   void _deleteAttachedDocument(AttachPageViewModel model) {
     model.deleteAttachedDocument();

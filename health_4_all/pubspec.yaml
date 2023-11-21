@@ -11,7 +11,8 @@ dependencies:
     sdk: flutter
   provider: ^6.1.1
   validadores: ^1.0.9
-  image_picker: ^0.8.4
+  image_picker: ^1.0.4
+  permission_handler: ^11.0.1
 
 dev_dependencies:
   flutter_test:
