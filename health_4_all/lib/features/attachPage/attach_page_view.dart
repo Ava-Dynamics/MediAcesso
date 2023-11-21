@@ -37,11 +37,17 @@ class _AttachPageViewState extends State<AttachPageView> {
                       ),
                     ),
                     const SizedBox(height: 16.0),
-                    ElevatedButton(
-                      onPressed: () {
+                    InkWell(
+                      onTap: () {
                         _attachProof(model);
                       },
-                      child: const Text('Anexar Comprovante'),
+                      child: Row(
+                        children: [
+                          Icon(Icons.attach_file),
+                          const SizedBox(width: 8.0),
+                          Text('Anexar Comprovante'),
+                        ],
+                      ),
                     ),
                     if (model.model.loadedDocumentName != null)
                       const SizedBox(height: 16.0),
@@ -80,9 +86,20 @@ class _AttachPageViewState extends State<AttachPageView> {
                             softWrap: true,
                           ),
                         ),
-    ],
-    )
-
+                      ],
+                    ),
+                    const SizedBox(height: 16.0),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Navegar para a AnalysisPageView
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => AnalysisPageView(),
+                          ),
+                        );
+                      },
+                      child: const Text('Concluir'),
+                    ),
                   ],
                 ),
               ),
@@ -105,6 +122,20 @@ class _AttachPageViewState extends State<AttachPageView> {
 
   void _deleteAttachedDocument(AttachPageViewModel model) {
     model.deleteAttachedDocument();
+  }
+}
+
+class AnalysisPageView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Análise do Cadastro'),
+      ),
+      body: Center(
+        child: Text('Seu cadastro está sendo analisado. Aguarde uma notificação.'),
+      ),
+    );
   }
 }
 
