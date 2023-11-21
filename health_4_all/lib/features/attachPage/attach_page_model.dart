@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 
 enum MedicationCategory {
   AntiHipertensivos,
@@ -7,11 +8,15 @@ enum MedicationCategory {
 }
 
 class AttachPageModel {
-  MedicationCategory category;
-  String medicationName;
+  String mobilityDifficulty;
+  List<MedicationCategory> selectedCategories;
+  String? loadedDocumentName;
+  bool agreedToTerms;
 
   AttachPageModel({
-    required this.category,
-    required this.medicationName,
+    required this.mobilityDifficulty,
+    required this.selectedCategories,
+    this.loadedDocumentName,
+    this.agreedToTerms = false,
   });
 }

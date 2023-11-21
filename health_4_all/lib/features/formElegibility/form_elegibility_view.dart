@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:health_4_all/features/attachPage/attach_page_view.dart';
+import 'package:health_4_all/features/formMedications/form_medications_view.dart';
 import 'package:health_4_all/features/formElegibility/form_elegibility_view_model.dart';
 
 class FormElegibilityView extends StatefulWidget {
@@ -160,7 +160,7 @@ String _formattedCPF(String unformattedCPF) {
     if (viewModel.isFormValid()) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => AttachPageView()),
+        MaterialPageRoute(builder: (context) => FormMedicationsView()),
       );
     } else {
       _showErrorSnackBar('Todos os campos são obrigatórios e o CPF deve ser válido');
