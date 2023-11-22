@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:health_4_all/myOrder/myOrder_view.dart';
 import 'package:provider/provider.dart';
+import 'package:health_4_all/features/detailsUBSItems/detailsUBSItems_view.dart';
 import 'package:health_4_all/features/mainHome/main_home_model.dart';
 import 'package:health_4_all/features/mainHome/main_home_view_model.dart';
 
@@ -12,25 +12,14 @@ class MainHomeView extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text('MediFarma Delivery'),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.shopping_cart),
-              onPressed: () {
-                // Adicione a lógica para navegar para a tela de pedidos aqui
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => MyOrderView(itemName: 'exemplo',)),
-                );
-              },
-            ),
-          ],
+          actions: [],
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildProfileHeader(),
             SizedBox(height: 16.0),
-            _buildUBSList(),
+            _buildUBSList(context),
           ],
         ),
       ),
@@ -57,7 +46,7 @@ class MainHomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildUBSList() {
+  Widget _buildUBSList(BuildContext context) {
     return Consumer<MainHomeViewModel>(
       builder: (context, viewModel, child) {
         return Expanded(
@@ -65,10 +54,21 @@ class MainHomeView extends StatelessWidget {
             itemCount: viewModel.ubsList.length,
             itemBuilder: (context, index) {
               UBSModel ubs = viewModel.ubsList[index];
-              return ListTile(
-                leading: Icon(Icons.local_hospital),
-                title: Text(ubs.name),
-                subtitle: Text(ubs.location),
+              return GestureDetector(
+                onTap: () {
+                  // Adicione a lógica para navegar para a tela de detalhes da UBS aqui
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => UBSItemView(ubs: ubs),
+                    ),
+                  );
+                },
+                child: ListTile(
+                  leading: Icon(Icons.local_hospital),
+                  title: Text(ubs.name),
+                  subtitle: Text(ubs.location),
+                ),
               );
             },
           ),
