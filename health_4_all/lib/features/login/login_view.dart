@@ -1,17 +1,5 @@
 import 'package:flutter/material.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: LoginPage(),
-    );
-  }
-}
+import 'package:health_4_all/features/mainHome/main_home_view.dart';
 
 class LoginPage extends StatelessWidget {
   final FocusNode emailFocusNode = FocusNode();
@@ -20,6 +8,9 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true, // Centraliza o título na AppBar
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -27,7 +18,7 @@ class LoginPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'Bem-vindo(a) ao MediFarma Delivery!',
+              'Bem-vindo(a) ao MediFarma Delivery',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 24,
@@ -60,10 +51,10 @@ class LoginPage extends StatelessWidget {
             SizedBox(height: 32.0),
             ElevatedButton(
               onPressed: () {
-                // Navigator.push(
-                  // context,
-                  // MaterialPageRoute(builder: (context) => const FormElegibilityView()),
-                // );
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => MainHomeView()),
+                );
               },
               child: Text('Login', style: TextStyle(color: Colors.green)),
             ),
