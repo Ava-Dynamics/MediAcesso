@@ -27,31 +27,29 @@ class _FormElegibilityViewState extends State<FormElegibilityView> {
   }
 
   void _formatCPF() {
-  String unformattedCPF = _cpfController.text.replaceAll(RegExp(r'\D'), '');
+    String unformattedCPF = _cpfController.text.replaceAll(RegExp(r'\D'), '');
 
-  // Atualiza o modelo com o valor não formatado
-  viewModel.numeroCpf = unformattedCPF;
-  viewModel.updateCpfValidation(unformattedCPF);
+    viewModel.numeroCpf = unformattedCPF;
+    viewModel.updateCpfValidation(unformattedCPF);
 
-  // Atualiza a exibição com o CPF formatado
-  int newCursorPosition = _cpfController.text.length;
-  _cpfController.value = _cpfController.value.copyWith(
-    text: _formattedCPF(unformattedCPF),
-    selection: TextSelection.fromPosition(TextPosition(offset: newCursorPosition)),
-  );
-}
-
-String _formattedCPF(String unformattedCPF) {
-  if (unformattedCPF.length <= 3) {
-    return unformattedCPF;
-  } else if (unformattedCPF.length <= 6) {
-    return '${unformattedCPF.substring(0, 3)}.${unformattedCPF.substring(3)}';
-  } else if (unformattedCPF.length <= 9) {
-    return '${unformattedCPF.substring(0, 3)}.${unformattedCPF.substring(3, 6)}.${unformattedCPF.substring(6)}';
-  } else {
-    return '${unformattedCPF.substring(0, 3)}.${unformattedCPF.substring(3, 6)}.${unformattedCPF.substring(6, 9)}-${unformattedCPF.substring(9)}';
+    int newCursorPosition = _cpfController.text.length;
+    _cpfController.value = _cpfController.value.copyWith(
+      text: _formattedCPF(unformattedCPF),
+      selection: TextSelection.fromPosition(TextPosition(offset: newCursorPosition)),
+    );
   }
-}
+
+  String _formattedCPF(String unformattedCPF) {
+    if (unformattedCPF.length <= 3) {
+      return unformattedCPF;
+    } else if (unformattedCPF.length <= 6) {
+      return '${unformattedCPF.substring(0, 3)}.${unformattedCPF.substring(3)}';
+    } else if (unformattedCPF.length <= 9) {
+      return '${unformattedCPF.substring(0, 3)}.${unformattedCPF.substring(3, 6)}.${unformattedCPF.substring(6)}';
+    } else {
+      return '${unformattedCPF.substring(0, 3)}.${unformattedCPF.substring(3, 6)}.${unformattedCPF.substring(6, 9)}-${unformattedCPF.substring(9)}';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,17 +76,20 @@ String _formattedCPF(String unformattedCPF) {
               _buildTextFieldWithLabel('Nome completo', 'Informe o nome completo', TextEditingController(), onChanged: (value) {
                 viewModel.nomeCompleto = value;
               }),
-              _buildCPFTextField(), // Usando a função específica para CPF
-              _buildTextFieldWithLabel('Nome da rua', 'Informe o nome da rua', TextEditingController(), onChanged: (value) {
+              _buildCPFTextField(),
+              _buildTextFieldWithLabel('E-mail', 'Ex: exemplo@gmail.com', TextEditingController(), onChanged: (value) {
+                viewModel.nomeCompleto = value;
+              }),
+              _buildTextFieldWithLabel('Nome da rua', 'Ex: Rua/Avenida', TextEditingController(), onChanged: (value) {
                 viewModel.nomeRua = value;
               }),
-              _buildTextFieldWithLabel('Número residencial', 'Informe o número residencial', TextEditingController(), onChanged: (value) {
+              _buildTextFieldWithLabel('Número residencial', 'Ex: 58', TextEditingController(), onChanged: (value) {
                 viewModel.numeroResidencial = value;
               }),
-              _buildTextFieldWithLabel('Cidade', 'Informe a cidade', TextEditingController(), onChanged: (value) {
+              _buildTextFieldWithLabel('Cidade', 'Ex: Ataléia', TextEditingController(), onChanged: (value) {
                 viewModel.cidade = value;
               }),
-              _buildTextFieldWithLabel('Estado', 'Informe o estado', TextEditingController(), onChanged: (value) {
+              _buildTextFieldWithLabel('Estado', 'Ex: SP/MG', TextEditingController(), onChanged: (value) {
                 viewModel.estado = value;
               }),
               const SizedBox(height: 16.0),
@@ -96,7 +97,9 @@ String _formattedCPF(String unformattedCPF) {
                 onPressed: () {
                   _submitForm(context);
                 },
-                child: const Text('Próximo Passo'),
+                child: const Text('Próximo Passo',
+                style: TextStyle(color: Colors.green),
+                ),
               ),
             ],
           ),
@@ -111,9 +114,10 @@ String _formattedCPF(String unformattedCPF) {
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 16.0,
             fontWeight: FontWeight.bold,
+            color: Colors.green,
           ),
         ),
         const SizedBox(height: 8.0),
@@ -135,9 +139,10 @@ String _formattedCPF(String unformattedCPF) {
       children: [
         Text(
           'Número do CPF',
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 16.0,
             fontWeight: FontWeight.bold,
+            color: Colors.green,
           ),
         ),
         const SizedBox(height: 8.0),
@@ -148,7 +153,7 @@ String _formattedCPF(String unformattedCPF) {
             viewModel.updateCpfValidation(value);
           },
           decoration: InputDecoration(
-            hintText: '123.456.789-00',
+            hintText: 'Ex: 123.456.789-00',
           ),
         ),
         const SizedBox(height: 16.0),

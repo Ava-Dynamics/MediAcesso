@@ -100,7 +100,9 @@ class _AttachPageViewState extends State<AttachPageView> {
                           ),
                         );
                       },
-                      child: const Text('Concluir'),
+                      child: const Text('Concluir',
+                      style: TextStyle(color: Colors.green)
+                      ),
                     ),
                   ],
                 ),

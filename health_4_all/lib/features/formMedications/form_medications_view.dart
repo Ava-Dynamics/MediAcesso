@@ -64,7 +64,9 @@ class _FormMedicationsViewState extends State<FormMedicationsView> {
                         _sendForm(model);
                         _navigateToAttachPage(); // Chame a função para navegar para AttachPageView
                       },
-                      child: const Text('Próximo Passo'),
+                      child: const Text('Próximo Passo',
+                      style: TextStyle(color: Colors.green)
+                      ),
                     ),
                   ],
                 ),
