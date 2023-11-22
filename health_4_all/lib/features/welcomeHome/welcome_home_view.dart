@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:health_4_all/features/formElegibility/form_elegibility_view.dart';
+import 'package:health_4_all/features/login/login_view.dart';
 
 class WelcomeHomeView extends StatelessWidget {
   final Function() onQueroMeCadastrarPressed;
@@ -52,7 +53,10 @@ class WelcomeHomeView extends StatelessWidget {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                print('Já sou cadastrado pressionado');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
               },
               child: Text(
                 'Já sou cadastrado',
