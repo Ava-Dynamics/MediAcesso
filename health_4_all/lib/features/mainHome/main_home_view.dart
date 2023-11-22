@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_4_all/myOrder/myOrder_view.dart';
 import 'package:provider/provider.dart';
 import 'package:health_4_all/features/mainHome/main_home_model.dart';
 import 'package:health_4_all/features/mainHome/main_home_view_model.dart';
@@ -16,6 +17,10 @@ class MainHomeView extends StatelessWidget {
               icon: Icon(Icons.shopping_cart),
               onPressed: () {
                 // Adicione a lógica para navegar para a tela de pedidos aqui
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyOrderView(itemName: 'exemplo',)),
+                );
               },
             ),
           ],
