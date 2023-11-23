@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:health_4_all/features/detailsUBSItems/detailsUBSItems_view_model.dart';
 import 'package:health_4_all/features/mainHome/main_home_model.dart';
 import 'package:health_4_all/features/myOrder/myOrder_view.dart';
+import 'package:health_4_all/features/myOrder/myOrder_model.dart';
 
 class UBSItemView extends StatelessWidget {
   final UBSModel ubs;
@@ -34,21 +35,21 @@ class UBSItemView extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.shopping_cart),
             onPressed: () {
-              print("Carrinho pressionado");
-              
-              // Adicionando logs para entender o estado antes da navegação
-              print("Itens selecionados: ${viewModel.getSelectedItems()}");
-              print("Itens definidos em MyOrderViewModel");
-              
-              // Tente usar 'Navigator.push' em vez de 'Navigator.pushReplacement'
+              // Converta a lista de UBSItemModel para OrderItem
+              List<OrderItem> orderItems = viewModel.selectedItems.map((ubsItem) {
+                return OrderItem(
+                  itemName: ubsItem.itemName,
+                  quantity: 1, // Você pode ajustar a quantidade conforme necessário
+                );
+              }).toList();
+
+              // Agora você pode passar orderItems para MyOrderView
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => MyOrderView(),
+                  builder: (context) => MyOrderView(selectedItems: orderItems),
                 ),
               );
-              
-              print("Navegação concluída para MyOrderView");
             },
           ),
           Positioned(

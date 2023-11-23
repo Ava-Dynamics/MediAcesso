@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:health_4_all/features/orderRequested/orderRequested_view.dart';
 import 'package:provider/provider.dart';
-import 'package:health_4_all/features/myOrder/myOrder_view_model.dart';
 import 'package:health_4_all/features/myOrder/myOrder_model.dart';
 
 class MyOrderView extends StatelessWidget {
+  final List<OrderItem> selectedItems;
+
+  MyOrderView({required this.selectedItems});
+
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => MyOrderViewModel(),
+    return ChangeNotifierProvider<MyOrderViewModel>(
+      create: (context) => MyOrderViewModel(selectedItems: selectedItems),
       child: _MyOrderView(),
     );
   }
@@ -36,7 +39,7 @@ class _MyOrderView extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16.0),
-            _buildSelectedItemsList(context, viewModel),
+            _buildSelectedItemsList(context),
             SizedBox(height: 16.0),
             _buildFinishOrderButton(context),
           ],
@@ -45,14 +48,14 @@ class _MyOrderView extends StatelessWidget {
     );
   }
 
-  Widget _buildSelectedItemsList(BuildContext context, MyOrderViewModel viewModel) {
-    List<OrderItem> orderItems = viewModel.selectedItems ?? [];
+  Widget _buildSelectedItemsList(BuildContext context) {
+    MyOrderViewModel viewModel = Provider.of<MyOrderViewModel>(context);
 
     return ListView.builder(
       shrinkWrap: true,
-      itemCount: orderItems.length,
+      itemCount: viewModel.selectedItems.length,
       itemBuilder: (context, index) {
-        OrderItem orderItem = orderItems[index];
+        OrderItem orderItem = viewModel.selectedItems[index];
         return ListTile(
           title: Text(orderItem.itemName),
           subtitle: Text('Quantidade: ${orderItem.quantity}'),
@@ -79,5 +82,25 @@ class _MyOrderView extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class MyOrderViewModel extends ChangeNotifier {
+  List<OrderItem> selectedItems;
+
+  MyOrderViewModel({required this.selectedItems});
+
+  void addItem(String itemName, int quantity) {
+    final existingItemIndex =
+        selectedItems.indexWhere((item) => item.itemName == itemName);
+
+    if (existingItemIndex != -1) {
+      selectedItems[existingItemIndex] =
+          OrderItem(itemName: itemName, quantity: quantity);
+    } else {
+      selectedItems.add(OrderItem(itemName: itemName, quantity: quantity));
+    }
+
+    notifyListeners();
   }
 }
