@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_4_all/features/orderRequested/orderRequested_view.dart';
 import 'package:provider/provider.dart';
 import 'package:health_4_all/features/myOrder/myOrder_view_model.dart';
 import 'package:health_4_all/features/myOrder/myOrder_model.dart';
@@ -45,25 +46,28 @@ class _MyOrderView extends StatelessWidget {
   }
 
   Widget _buildSelectedItemsList(BuildContext context, MyOrderViewModel viewModel) {
-  List<OrderItem> orderItems = viewModel.selectedItems ?? [];
+    List<OrderItem> orderItems = viewModel.selectedItems ?? [];
 
-  return ListView.builder(
-    shrinkWrap: true,
-    itemCount: orderItems.length,
-    itemBuilder: (context, index) {
-      OrderItem orderItem = orderItems[index];
-      return ListTile(
-        title: Text(orderItem.itemName),
-        subtitle: Text('Quantidade: ${orderItem.quantity}'),
-      );
-    },
-  );
-}
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: orderItems.length,
+      itemBuilder: (context, index) {
+        OrderItem orderItem = orderItems[index];
+        return ListTile(
+          title: Text(orderItem.itemName),
+          subtitle: Text('Quantidade: ${orderItem.quantity}'),
+        );
+      },
+    );
+  }
 
   Widget _buildFinishOrderButton(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        // Adicione a lógica para finalizar o pedido aqui
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => OrderRequestedView()),
+        );
       },
       style: ElevatedButton.styleFrom(
         primary: Colors.lightGreenAccent, // Cor de fundo

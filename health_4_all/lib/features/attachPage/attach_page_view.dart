@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_4_all/features/analysisPage/analysis_page_view.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:health_4_all/features/attachPage/attach_page_view_model.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -135,20 +136,6 @@ class _AttachPageViewState extends State<AttachPageView> {
 
   void _deleteAttachedDocument(AttachPageViewModel model) {
     model.deleteAttachedDocument();
-  }
-}
-
-class AnalysisPageView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Análise do Cadastro'),
-      ),
-      body: Center(
-        child: Text('Seu cadastro está sendo analisado. Aguarde uma notificação.'),
-      ),
-    );
   }
 }
 
