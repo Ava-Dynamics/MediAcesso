@@ -1,8 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:health_4_all/features/formElegibility/form_elegibility_model.dart';
 import 'package:validadores/Validador.dart';
 import 'package:validadores/validadores.dart';
 
-class FormElegibilityViewModel {
+class FormElegibilityViewModel extends ChangeNotifier {
   final UserInfo _userInfo = UserInfo();
   String cpfValidationError = '';
 
