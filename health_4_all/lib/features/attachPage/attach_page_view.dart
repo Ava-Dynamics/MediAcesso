@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:health_4_all/features/analysisPage/analysis_page_view.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:health_4_all/features/attachPage/attach_page_view_model.dart';
+import 'package:health_4_all/features/formMedications/form_medications_view.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
@@ -137,13 +138,27 @@ class _AttachPageViewState extends State<AttachPageView> {
   void _deleteAttachedDocument(AttachPageViewModel model) {
     model.deleteAttachedDocument();
   }
-}
 
-class FormMedicationsView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // Restante do código que foi removido da AttachPageView...
-    return Container();
+  void _submitForm(BuildContext context, AttachPageViewModel viewModel) async {
+    bool dataSaved = await viewModel.saveFormData();
+
+    if (dataSaved) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => FormMedicationsView()),
+      );
+    } else {
+      _showErrorSnackBar(context, 'Erro ao salvar os dados.');
+    }
+  }
+
+  void _showErrorSnackBar(BuildContext context, String errorMessage) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(errorMessage),
+        duration: const Duration(seconds: 2),
+      ),
+    );
   }
 }
 

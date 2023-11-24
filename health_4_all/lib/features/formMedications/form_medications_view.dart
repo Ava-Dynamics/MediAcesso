@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:health_4_all/features/attachPage/attach_page_view.dart'; // Importe a página AttachPageView
+import 'package:health_4_all/features/attachPage/attach_page_view.dart'; 
+import 'package:health_4_all/features/attachPage/attach_page_model.dart';
 import 'package:provider/provider.dart';
 import 'package:health_4_all/features/attachPage/attach_page_view_model.dart';
 
@@ -106,11 +107,33 @@ class _FormMedicationsViewState extends State<FormMedicationsView> {
     print('Clicou no Próximo Passo');
   }
 
+  void _submitForm(BuildContext context, AttachPageViewModel viewModel) async {
+  bool dataSaved = await viewModel.saveFormData();
+  
+  if (dataSaved) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => FormMedicationsView()),
+    );
+  } else {
+    _showErrorSnackBar('Erro ao salvar os dados.');
+  }
+}
+
   // Função para navegar para AttachPageView
   void _navigateToAttachPage() {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => AttachPageView(),
+      ),
+    );
+  }
+
+  void _showErrorSnackBar(String errorMessage) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(errorMessage),
+        duration: const Duration(seconds: 2),
       ),
     );
   }

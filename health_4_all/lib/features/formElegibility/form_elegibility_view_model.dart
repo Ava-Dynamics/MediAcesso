@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:health_4_all/features/formElegibility/form_elegibility_model.dart';
+import 'package:health_4_all/features/dataBase/databaseHelper.dart';
 import 'package:validadores/Validador.dart';
 import 'package:validadores/validadores.dart';
 
@@ -26,9 +27,22 @@ class FormElegibilityViewModel extends ChangeNotifier {
 
 }
 
+  Future<void> saveFormData(UserInfo formData) async {
+  try {
+    print('Salvando dados no banco: $formData');
+    // Chame o método na classe de helper do SQLite para salvar os dados.
+    await DatabaseHelper.instance.insertFormData(formData);
+    print('Dados salvos com sucesso!');
+  } catch (e) {
+    // Trate qualquer erro durante a operação de salvamento.
+    print('Erro ao salvar dados no banco de dados: $e');
+  }
+}
+
   bool isFormValid() {
     return _userInfo.nomeCompleto.isNotEmpty &&
         _userInfo.numeroCpf.isNotEmpty &&
+        _userInfo.email.isNotEmpty &&
         _userInfo.nomeRua.isNotEmpty &&
         _userInfo.numeroResidencial.isNotEmpty &&
         _userInfo.cidade.isNotEmpty &&
@@ -44,6 +58,11 @@ class FormElegibilityViewModel extends ChangeNotifier {
   String get numeroCpf => _userInfo.numeroCpf;
   set numeroCpf(String value) {
     _userInfo.numeroCpf = value;
+  }
+
+  String get email => _userInfo.email;
+  set email(String value) {
+    _userInfo.email = value;
   }
 
   String get nomeRua => _userInfo.nomeRua;
